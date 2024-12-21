@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import Emails from "./pages/Emails";
+import SingleEmail from "./pages/SingleEmail";
+import { useSelector } from "react-redux";
 
 function App() {
+  const { open } = useSelector((state) => state?.email);
+  const { singleEmail } = useSelector((state) => state?.email);
+
+  const [favorites, setFavorites] = useState(
+    JSON.parse(localStorage.getItem("favorites")) || []
+  );
+
+   
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="main-container">
+      <section
+        className="email-container"
+        style={{ width: open === true ? " 60%" : "100%" }}
+      >
+        <Emails favorites={favorites} setFavorites={setFavorites} />
+      </section>
+      {open && (
+        <section className="single-email-container">
+          <SingleEmail
+            detailsEmail={singleEmail}
+            favorites={favorites}
+            setFavorites={setFavorites}
+          />
+        </section>
+      )}
+    </main>
   );
 }
 
